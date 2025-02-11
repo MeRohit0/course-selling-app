@@ -1,7 +1,6 @@
 const express = require("express");
 const adminRouter = express.Router();
-
-// - Add routes for admin login, admin signup, create a course, delete a course, add course content.
+const { adminModel } = require("../db");
 
 adminRouter.post("/login" , function(req, res){
     res.json({
