@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-(async () => {
-    mongoose.connect("mongodb+srv://<password_StrikeOff>@cluster0.sug5k.mongodb.net/course-selling-app")
-})();
 
 const userSchema = new Schema({
     email : { type: String, unique: true},
@@ -19,13 +16,15 @@ const adminSchema = new Schema({
     firstName : String,
     LastName : String
 })
+
 const courseSchema = new Schema({
     title : String,
     description : String,
     price : Number,
     imageUrl : String,
     creatorId : ObjectId
-})
+}) 
+
 const purchaseSchema = new Schema({
     courseId : ObjectId,
     userId : ObjectId
