@@ -9,7 +9,7 @@ const { courseRouter } = require("./routes/course.js");
 const { adminRouter } = require("./routes/admin.js");
 const app = express();
 const port = 3000;
-
+app.use(express.json());
 // Routing in express 
 app.use("/user", userRouter);
 app.use("/course", courseRouter);
