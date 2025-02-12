@@ -20,7 +20,7 @@ userRouter.post("/signup", async function(req,res){
         })
     } catch (e) {
         console.log("error : " + e );
-        res.status(401).json({
+        res.status(403).json({
             message : "User Already Signup"
         })
         return;
@@ -33,21 +33,23 @@ userRouter.post("/signup", async function(req,res){
 
 userRouter.post("/login", async function(req,res){
     const { email , password } = req.body;
-    const user = await userModel.find({
+    const user = await userModel.findOne({
         email : email,
         password : password
     });
 
     if ( user ){
+        
         const token = jwt.sign({
             id : user._id
-        },JWT_SECRET);
+        }, JWT_SECRET);
+
         res.json({
             token : token,
             message : "signin endpoint"
         })
     } else{
-        res.json({
+        res.status(403).json({
             message : "invalid credintials"
         })
     }
