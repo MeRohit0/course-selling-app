@@ -1,6 +1,9 @@
 const express = require("express");
 const adminRouter = express.Router();
 const { adminModel } = require("../db");
+const { z } = require("zod");
+
+// bcrypt, zod, jsonwebtoken
 
 adminRouter.post("/login" , function(req, res){
     res.json({
