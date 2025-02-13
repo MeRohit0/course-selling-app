@@ -4,11 +4,12 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const { userRouter } = require("./routes/user.js");
-const { courseRouter } = require("./routes/course.js");
-const { adminRouter } = require("./routes/admin.js");
+const { userRouter } = require("./routes/user");
+const { courseRouter } = require("./routes/course");
+const { adminRouter } = require("./routes/admin");
 const app = express();
 const port = 3000;
+
 app.use(express.json());
 // Routing in express 
 app.use("/user", userRouter);

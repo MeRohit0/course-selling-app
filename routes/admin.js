@@ -4,6 +4,7 @@ const { adminModel } = require("../db");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET =  process.env.JWT_SECRET_ADMIN;
+const { adminAuth } = require("../middleware/adminAuth");
 
 // bcrypt, zod, jsonwebtoken
 
@@ -54,25 +55,25 @@ adminRouter.post("/signup" , async function(req,res){
     })
 })
 
-adminRouter.post("/course", function(req,res){
+adminRouter.post("/course", adminAuth, function(req,res){
     res.json({
         message : "admin create course endpoint"
     })
 })
 
-adminRouter.put("/course", function(req,res){
+adminRouter.put("/course", adminAuth, function(req,res){
     res.json({
         message : "admin update course endpoint"
     })
 })
 
-adminRouter.get("/course/bulk", function(req,res){
+adminRouter.get("/course/bulk", adminAuth, function(req,res){
     res.json({
         message : "admin see courses endpoint"
     })
 })
 
-adminRouter.delete("/course", function(req,res){
+adminRouter.delete("/course", adminAuth, function(req,res){
     res.json({
         message : "admin delete course endpoint"
     })

@@ -3,6 +3,7 @@ const userRouter = Router();
 const { userModel } = require("../db");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET_USERS;
+const { userAuth } = require("../middleware/userAuth");
 
 
 userRouter.post("/signup", async function(req,res){
@@ -55,7 +56,7 @@ userRouter.post("/login", async function(req,res){
     }
 });
 
-userRouter.get("/purchases", function(req,res){
+userRouter.get("/purchases", userAuth, function(req,res){
     res.json({
         message : "user purchased course endpoint"
     })
