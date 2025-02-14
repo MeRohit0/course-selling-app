@@ -19,4 +19,5 @@
   - Frontend in React
 
 Database Schema for this project 
+
  ![Schema Diagram](<db schema black bg.png>)
