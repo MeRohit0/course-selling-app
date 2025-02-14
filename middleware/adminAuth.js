@@ -4,7 +4,12 @@ const JWT_SECRET = process.env.JWT_SECRET_ADMIN;
 
 function adminAuth(req, res, next){
     const token = req.headers.authorization;
-    const authdata = jwt.verify(token, JWT_SECRET);
+    let authdata;
+    try {
+        authdata = jwt.verify(token, JWT_SECRET);
+    }catch(e){
+        console.error("file : adminAuth error: " + e );
+    }
     
     if(authdata){
         req.userId = authdata.id;

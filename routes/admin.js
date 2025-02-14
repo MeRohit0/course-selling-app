@@ -1,12 +1,13 @@
 const express = require("express");
 const adminRouter = express.Router();
 const { adminModel } = require("../db");
+const { courseModel } = require("../db");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET =  process.env.JWT_SECRET_ADMIN;
 const { adminAuth } = require("../middleware/adminAuth");
 
-// bcrypt, zod, jsonwebtoken
+// bcrypt, zod
 
 adminRouter.post("/login" , async function(req, res){
     const { email , password } = req.body;
@@ -55,27 +56,81 @@ adminRouter.post("/signup" , async function(req,res){
     })
 })
 
-adminRouter.post("/course", adminAuth, function(req,res){
+adminRouter.post("/course", adminAuth, async function(req,res){
+    const { title, description, price, imageUrl} = req.body;
+    const adminId = req.userId;
+    let courseId;
+    try{
+        const course = await courseModel.create({
+            title: title,
+            description : description,
+            price : price,
+            imageUrl : imageUrl,
+            creatorId : adminId
+        })
+        courseId = course._id;
+
+    }catch(e){
+        console.log("error is : " + e);
+        res.status(500).json({
+            message : "some error in db"
+        })
+    }
+
     res.json({
-        message : "admin create course endpoint"
+        message : "course created",
+        courseId : courseId
     })
 })
 
-adminRouter.put("/course", adminAuth, function(req,res){
+adminRouter.put("/course", adminAuth, async function(req,res){
+    const { title, description, price, imageUrl, courseId} = req.body;
+    const adminId = req.userId;
+
+    try{
+    await courseModel.updateOne({
+        _id : courseId,
+        creatorId : adminId
+    },
+    {
+        title: title,
+        description : description,
+        price : price,
+        imageUrl : imageUrl,
+    })
+    }catch( e ){
+        console.log("error is : " + e);
+        res.status(500).json({
+            message : "some error in db"
+        })
+        return;
+    }
     res.json({
-        message : "admin update course endpoint"
+        message : "course updated",
+        courseId : courseId
     })
 })
 
-adminRouter.get("/course/bulk", adminAuth, function(req,res){
+adminRouter.get("/course/bulk", adminAuth, async function(req,res){
+    const userId  = req.userId;
+    const course = await courseModel.find({
+        creatorId : userId
+    })
     res.json({
-        message : "admin see courses endpoint"
+        message : "all courses",
+        course : course
     })
 })
 
-adminRouter.delete("/course", adminAuth, function(req,res){
+adminRouter.delete("/course", adminAuth, async function(req,res){
+    const  courseId  = req.body.courseId;
+    const course = await courseModel.deleteOne({
+        _id : courseId
+    })
+
     res.json({
-        message : "admin delete course endpoint"
+        message : "delete course",
+        course : course
     })
 })
 
