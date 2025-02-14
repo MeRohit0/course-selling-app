@@ -86,9 +86,9 @@ adminRouter.post("/course", adminAuth, async function(req,res){
 adminRouter.put("/course", adminAuth, async function(req,res){
     const { title, description, price, imageUrl, courseId} = req.body;
     const adminId = req.userId;
-
+    let updateData ;
     try{
-    await courseModel.updateOne({
+    updateData =  await courseModel.updateOne({
         _id : courseId,
         creatorId : adminId
     },
@@ -107,7 +107,8 @@ adminRouter.put("/course", adminAuth, async function(req,res){
     }
     res.json({
         message : "course updated",
-        courseId : courseId
+        courseId : courseId,
+        updateData :  updateData
     })
 })
 
@@ -123,9 +124,11 @@ adminRouter.get("/course/bulk", adminAuth, async function(req,res){
 })
 
 adminRouter.delete("/course", adminAuth, async function(req,res){
+    const userId = req.userId;
     const  courseId  = req.body.courseId;
     const course = await courseModel.deleteOne({
-        _id : courseId
+        _id : courseId,
+        creatorId : userId
     })
 
     res.json({
