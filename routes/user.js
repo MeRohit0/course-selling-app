@@ -4,9 +4,9 @@ const { userModel , purchaseModel } = require("../db");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET_USERS;
 const { userAuth } = require("../middleware/userAuth");
+const { userPostSignup, userPostLogin} = require("../middleware/userInputValidationCheck");
 
-
-userRouter.post("/signup", async function(req,res){
+userRouter.post("/signup", userPostSignup, async function(req,res){
     const { email, password, firstName, lastName } = req.body;
     // TODO: adding zod Validation
     // TODO: hash the password and store in DB
@@ -32,7 +32,7 @@ userRouter.post("/signup", async function(req,res){
     })
 });
 
-userRouter.post("/login", async function(req,res){
+userRouter.post("/login", userPostLogin, async function(req,res){
     const { email , password } = req.body;
     const user = await userModel.findOne({
         email : email,
@@ -65,7 +65,7 @@ userRouter.get("/purchases", userAuth, async function(req,res){
         message : "user purchased course endpoint",
         purchaseCourses
     })
-})
+});
 
 module.exports = {
     userRouter : userRouter

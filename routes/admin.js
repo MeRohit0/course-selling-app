@@ -6,10 +6,12 @@ const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET =  process.env.JWT_SECRET_ADMIN;
 const { adminAuth } = require("../middleware/adminAuth");
+const { adminPostLogin, adminPostSignup, adminPostCourse, adminPutCourse } = require("../middleware/adminInputValidationCheck");
+
 
 // bcrypt, zod
 
-adminRouter.post("/login" , async function(req, res){
+adminRouter.post("/login" , adminPostLogin, async function(req, res){
     const { email , password } = req.body;
     const admin = await adminModel.findOne({
         email : email,
@@ -32,9 +34,9 @@ adminRouter.post("/login" , async function(req, res){
     }
 })
 
-adminRouter.post("/signup" , async function(req,res){
+adminRouter.post("/signup" , adminPostSignup, async function(req,res){
     const { email, password, firstName, lastName } = req.body;
-    // TODO: adding zod Validation
+    // TODO: adding zod Validation -done
     // TODO: hash the password and store in DB
 
     try {
@@ -56,7 +58,7 @@ adminRouter.post("/signup" , async function(req,res){
     })
 })
 
-adminRouter.post("/course", adminAuth, async function(req,res){
+adminRouter.post("/course", adminAuth, adminPostCourse ,async function(req,res){
     const { title, description, price, imageUrl} = req.body;
     const adminId = req.userId;
     let courseId;
@@ -83,7 +85,7 @@ adminRouter.post("/course", adminAuth, async function(req,res){
     })
 })
 
-adminRouter.put("/course", adminAuth, async function(req,res){
+adminRouter.put("/course", adminAuth, adminPutCourse, async function(req,res){
     const { title, description, price, imageUrl, courseId} = req.body;
     const adminId = req.userId;
     let updateData ;
