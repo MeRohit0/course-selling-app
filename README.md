@@ -20,4 +20,8 @@
 
 Database Schema for this project 
 
+<<<<<<< HEAD
 ![Schema Diagram](<db schema black bg.png>)
+=======
+ ![Schema Diagram](<db schema black bg.png>)
+>>>>>>> 8ef1ed55fa9151c2adb5a3644398462572f9bca2
